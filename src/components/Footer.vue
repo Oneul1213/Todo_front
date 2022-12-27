@@ -1,5 +1,5 @@
 <template>
-    <foooter class="footer">
+    <footer class="footer">
         <span class="todo-count">
             <strong>10</strong> items left
         </span>
@@ -9,7 +9,7 @@
             </li>
         </ul>
         <button class="clear-completed" style="display: none;">Clear completed</button>
-    </foooter>
+    </footer>
 </template>
 
 <script>

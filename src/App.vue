@@ -2,7 +2,7 @@
   <div id="app">
     <section class="todoapp">
       <Header/>
-      <Todo/>
+      <Todo :todos="todos"/>
       <Footer/>
     </section>
   </div>
@@ -19,6 +19,23 @@ export default {
     Header,
     Todo,
     Footer
+  },
+
+  data() {
+    return {
+      todos: [
+        {
+          id: new Date(),
+          text: "Vue 공부하기",
+          isDone: true
+        },
+        {
+          id: new Date(),
+          text: "치킨 먹기",
+          isDone: false
+        }
+      ]
+    };
   }
 };
 </script>

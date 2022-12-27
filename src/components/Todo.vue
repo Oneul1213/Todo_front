@@ -1,10 +1,14 @@
 <template>
   <section class="main">
     <ul class="todo-list">
-      <li class="todo">
+      <li 
+        :class="{ todo: true, completed: isDone }" 
+        v-for="({ id, text, isDone }, idx) in todos" 
+        :key="idx"
+      >
         <div class="view">
-          <input class="toggle" type="checkbox">
-          <label>Hello</label>
+          <input class="toggle" type="checkbox" :checked="isDone">
+          <label>{{ text }}</label>
           <button class="destroy"></button>
         </div>
         <input class="edit" type="text">
@@ -14,7 +18,11 @@
 </template>
 
 <script>
-export default {};
+export default {
+  props: {
+    todos: { type: Array, default: () => [] }
+  }
+};
 </script>
 
 <style>

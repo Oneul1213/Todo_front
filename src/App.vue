@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <section class="todoapp">
-      <Header/>
+      <Header @insertTodo="insertTodo"/>
       <Todo :todos="todos"/>
       <Footer/>
     </section>
@@ -36,6 +36,19 @@ export default {
         }
       ]
     };
+  },
+
+  methods: {
+    insertTodo(text) {
+      this.todos = [
+        ...this.todos,
+        {
+          id: new Date().getTime(),
+          text,
+          isDone: false
+        }
+      ];
+    }
   }
 };
 </script>

@@ -2,7 +2,7 @@
   <div id="app">
     <section class="todoapp">
       <Header @insertTodo="insertTodo"/>
-      <Todo :todos="todos"/>
+      <Todo :todos="todos" @removeTodo="removeTodo"/>
       <Footer/>
     </section>
   </div>
@@ -48,6 +48,10 @@ export default {
           isDone: false
         }
       ];
+    },
+
+    removeTodo(id) {
+      this.todos = this.todos.filter(todo => todo.id !== id);
     }
   }
 };

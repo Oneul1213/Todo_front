@@ -9,7 +9,7 @@
         <div class="view">
           <input class="toggle" type="checkbox" :checked="isDone">
           <label>{{ text }}</label>
-          <button class="destroy"></button>
+          <button class="destroy" @click="handleRemove(id)"></button>
         </div>
         <input class="edit" type="text">
       </li>
@@ -21,6 +21,12 @@
 export default {
   props: {
     todos: { type: Array, default: () => [] }
+  },
+
+  methods: {
+    handleRemove(id) {
+      this.$emit("removeTodo", id);
+    }
   }
 };
 </script>

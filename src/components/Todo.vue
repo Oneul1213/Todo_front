@@ -7,7 +7,7 @@
         :key="idx"
       >
         <div class="view">
-          <input class="toggle" type="checkbox" :checked="isDone">
+          <input class="toggle" type="checkbox" :checked="isDone" @click="handleDone(id)"/>
           <label>{{ text }}</label>
           <button class="destroy" @click="handleRemove(id)"></button>
         </div>
@@ -26,6 +26,10 @@ export default {
   methods: {
     handleRemove(id) {
       this.$emit("removeTodo", id);
+    },
+
+    handleDone(id) {
+      this.$emit("updateDone", id);
     }
   }
 };

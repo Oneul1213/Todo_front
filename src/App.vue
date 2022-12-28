@@ -3,12 +3,16 @@
     <section class="todoapp">
       <Header @insertTodo="insertTodo"/>
       <Todo 
-        :todos="todos" 
+        :todos="filteredList" 
         @removeTodo="removeTodo" 
         @updateDone="updateDone"
         @updateTodo="updateTodo"
       />
-      <Footer/>
+      <Footer 
+        :filterType="filterType" 
+        :size="filteredList.length" 
+        @onFilterType="handleFilterType"
+      />
     </section>
   </div>
 </template>
@@ -35,11 +39,12 @@ export default {
           isDone: true
         },
         {
-          id: new Date(),
+          id: new Date() + 1,
           text: "치킨 먹기",
           isDone: false
         }
-      ]
+      ],
+      filterType: 'All'
     };
   },
 
@@ -76,6 +81,30 @@ export default {
       if (todo) {
         todo.text = text;
         this.todos = todos;
+      }
+    },
+
+    handleFilterType(type) {
+      this.filterType = type;
+    }
+  },
+
+  computed: {
+    filteredList() {
+      switch(this.filterType) {
+        case "All": {
+          return this.todos;
+        }
+        case "Active": {
+          return this.todos.filter((todo) => !todo.isDone);
+        }
+        case "Completed": {
+          return this.todos.filter((todo) => todo.isDone);
+        }
+
+        default: {
+          return [];
+        }
       }
     }
   }

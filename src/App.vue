@@ -2,7 +2,12 @@
   <div id="app">
     <section class="todoapp">
       <Header @insertTodo="insertTodo"/>
-      <Todo :todos="todos" @removeTodo="removeTodo" @updateDone="updateDone"/>
+      <Todo 
+        :todos="todos" 
+        @removeTodo="removeTodo" 
+        @updateDone="updateDone"
+        @updateTodo="updateTodo"
+      />
       <Footer/>
     </section>
   </div>
@@ -60,6 +65,16 @@ export default {
 
       if (todo) {
         todo.isDone = !todo.isDone;
+        this.todos = todos;
+      }
+    },
+
+    updateTodo({ id, text }) {
+      const todos = [...this.todos];
+      const todo = todos.find(todo => todo.id === id);
+
+      if (todo) {
+        todo.text = text;
         this.todos = todos;
       }
     }

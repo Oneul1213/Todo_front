@@ -1,11 +1,15 @@
 <template>
     <footer class="footer">
         <span class="todo-count">
-            <strong>10</strong> items left
+            <strong>{{ size }}</strong> items left
         </span>
         <ul class="filters">
-            <li>
-                <a href="javascript:;" class="selected">Done</a>
+            <li 
+              v-for="(filter, idx) in filters" 
+              :key="idx" 
+              @click="handleFilterType(filter)"
+            >
+                <a href="javascript:;" :class="{ selected: filterType === filter }">{{ filter }}</a>
             </li>
         </ul>
         <button class="clear-completed" style="display: none;">Clear completed</button>
@@ -13,7 +17,24 @@
 </template>
 
 <script>
-export default {};
+export default {
+  props: {
+    filterType: { type: String, default: 'All' },
+    size: { type: Number, default: 0 }
+  },
+
+  data() {
+    return {
+      filters: ["All", "Active", "Completed"]
+    };
+  },
+
+  methods: {
+    handleFilterType(type) {
+      this.$emit("onFilterType", type);
+    }
+  }
+};
 </script>
 
 <style>

@@ -2,8 +2,17 @@
   <div id="app">
     <section class="todoapp">
       <Header @insertTodo="insertTodo"/>
-      <Todo :todos="todos"/>
-      <Footer/>
+      <Todo 
+        :todos="filteredList" 
+        @removeTodo="removeTodo" 
+        @updateDone="updateDone"
+        @updateTodo="updateTodo"
+      />
+      <Footer 
+        :filterType="filterType" 
+        :size="filteredList.length" 
+        @onFilterType="handleFilterType"
+      />
     </section>
   </div>
 </template>
@@ -30,11 +39,12 @@ export default {
           isDone: true
         },
         {
-          id: new Date(),
+          id: new Date() + 1,
           text: "치킨 먹기",
           isDone: false
         }
-      ]
+      ],
+      filterType: 'All'
     };
   },
 
@@ -48,6 +58,54 @@ export default {
           isDone: false
         }
       ];
+    },
+
+    removeTodo(id) {
+      this.todos = this.todos.filter(todo => todo.id !== id);
+    },
+
+    updateDone(id) {
+      const todos = [...this.todos];
+      const todo = todos.find(todo => todo.id === id);
+
+      if (todo) {
+        todo.isDone = !todo.isDone;
+        this.todos = todos;
+      }
+    },
+
+    updateTodo({ id, text }) {
+      const todos = [...this.todos];
+      const todo = todos.find(todo => todo.id === id);
+
+      if (todo) {
+        todo.text = text;
+        this.todos = todos;
+      }
+    },
+
+    handleFilterType(type) {
+      this.filterType = type;
+    }
+  },
+
+  computed: {
+    filteredList() {
+      switch(this.filterType) {
+        case "All": {
+          return this.todos;
+        }
+        case "Active": {
+          return this.todos.filter((todo) => !todo.isDone);
+        }
+        case "Completed": {
+          return this.todos.filter((todo) => todo.isDone);
+        }
+
+        default: {
+          return [];
+        }
+      }
     }
   }
 };

@@ -3,10 +3,11 @@
         <h1>todos</h1>
         <input 
             class="new-todo" 
-            v-model="text"
             autofocus 
             autocomplete="off" 
             placeholder="What needs to be done?"
+            v-model="text"
+            @keypress="handleTodo"
         />
     </header>
 </template>
@@ -19,9 +20,14 @@ export default {
         };
     },
 
-    watch: {
-        text() {
-            console.log(this.text);
+    methods: {
+        handleTodo({ keyCode }) {
+            const { text } = this;
+
+            if (keyCode == 13 && text !== "") {
+                this.$emit("insertTodo", text);
+                this.text = "";
+            }
         }
     }
 };

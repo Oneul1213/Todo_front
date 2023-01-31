@@ -23,6 +23,7 @@ import "./assets/css/main.css";
 import Header from "./components/Header";
 import Todo from "./components/Todo";
 import Footer from "./components/Footer";
+// import { Console } from "console";
 export default {
   components: {
     Header,
@@ -40,12 +41,22 @@ export default {
         },
         {
           id: new Date() + 1,
-          text: "치킨 먹기",
+          text: "Javascript 공부하기",
           isDone: false
         }
       ],
       filterType: 'All'
     };
+  },
+
+  mounted() {
+    this.$axios.get('/todo-list/item/all')
+        .then((res) =>  {
+          this.todos = res.data;
+        })
+        .catch((err) => {
+          console.log('err : ' + err.message)
+        })
   },
 
   methods: {

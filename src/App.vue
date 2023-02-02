@@ -126,7 +126,6 @@ export default {
       const todo = todos.find(todo => todo.id === id);
 
       if (todo) {
-        todo.isDone = todo.isDone ? 0 : 1;
         todo.text = text;
         // this.todos = todos;
         

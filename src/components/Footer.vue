@@ -13,6 +13,7 @@
             </li>
         </ul>
         <button class="clear-completed" style="display: none;">Clear completed</button>
+        <!-- <button class="save-button" @click="saveTodoList">Save list</button> -->
     </footer>
 </template>
 
@@ -32,7 +33,12 @@ export default {
   methods: {
     handleFilterType(type) {
       this.$emit("onFilterType", type);
-    }
+    },
+
+    // saveTodoList() {
+    //   console.log("saveTodoList 클릭");
+    //   this.$emit("saveTodoList");
+    // }
   }
 };
 </script>
@@ -89,4 +95,9 @@ export default {
 .filters li a.selected {
   border-color: rgba(175, 47, 47, 0.2);
 }
+/* .save-button {
+  float: right;
+  border: 1px solid rgba(175, 47, 47, 0.3);
+  padding: 3px 7px;
+} */
 </style>

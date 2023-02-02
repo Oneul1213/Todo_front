@@ -14,6 +14,7 @@
         @onFilterType="handleFilterType"
       />
     </section>
+    <!-- <button @click="saveList">Save List</button> -->
   </div>
 </template>
 
@@ -23,7 +24,7 @@ import "./assets/css/main.css";
 import Header from "./components/Header";
 import Todo from "./components/Todo";
 import Footer from "./components/Footer";
-// import { Console } from "console";
+
 export default {
   components: {
     Header,
@@ -35,44 +36,75 @@ export default {
     return {
       todos: [
         {
-          id: new Date(),
-          text: "Vue 공부하기",
+          id: 0,
+          text: "sample - Vue 공부하기",
           isDone: true
         },
-        {
-          id: new Date() + 1,
-          text: "Javascript 공부하기",
-          isDone: false
-        }
       ],
       filterType: 'All'
     };
   },
 
   mounted() {
-    this.$axios.get('/todo-list/item/all')
+    this.loadList()
+  },
+  
+  beforeUpdate() {
+    // this.loadList()
+  },
+
+  methods: {
+    loadList() {
+      this.$axios.get('/todo-list/item/all')
         .then((res) =>  {
           this.todos = res.data;
+          this.todos.forEach((todo) => {
+            console.log(todo);
+          });
+          console.log("todos loaded");
         })
         .catch((err) => {
           console.log('err : ' + err.message)
         })
-  },
+    },
 
-  methods: {
     insertTodo(text) {
-      this.todos = [
-        ...this.todos,
-        {
-          id: new Date().getTime(),
-          text,
-          isDone: false
-        }
-      ];
+      const newItem = {
+        text,
+        isDone: 0
+      };
+
+      this.$axios.post('/todo-list/item/save', newItem)
+          .then((res) => {
+            console.log('insert success : ' + res.data)
+            this.loadList();
+          })
+          .catch((err) => {
+            console.log('err : ' + err.message);
+          });
+
+      // this.todos = [
+      //   ...this.todos,
+      //   {
+      //     id: new Date().getTime(),
+      //     text,
+      //     isDone: false
+      //   }
+      // ];
     },
 
     removeTodo(id) {
-      this.todos = this.todos.filter(todo => todo.id !== id);
+      console.log('id = ' + id);
+      this.$axios.post('/todo-list/item/remove', {id})
+          .then((res) => {
+            console.log('delete success : ' + res.data);
+            this.loadList();
+          })
+          .catch((err) => {
+            console.log('err : ' + err.message);
+          });
+      
+      // this.todos = this.todos.filter(todo => todo.id !== id);
     },
 
     updateDone(id) {
@@ -80,8 +112,12 @@ export default {
       const todo = todos.find(todo => todo.id === id);
 
       if (todo) {
-        todo.isDone = !todo.isDone;
-        this.todos = todos;
+        todo.isDone = todo.isDone ? 0 : 1;
+        console.log('todo.id : ' + todo.id);
+        console.log('todo.isDone : ' + todo.isDone);
+        // this.todos = todos;
+
+        this.requestUpdateItem(todo);
       }
     },
 
@@ -90,13 +126,42 @@ export default {
       const todo = todos.find(todo => todo.id === id);
 
       if (todo) {
+        todo.isDone = todo.isDone ? 0 : 1;
         todo.text = text;
-        this.todos = todos;
+        // this.todos = todos;
+        
+        this.requestUpdateItem(todo);
       }
     },
 
     handleFilterType(type) {
       this.filterType = type;
+    },
+
+    requestUpdateItem(todoItem) {
+      console.log('rq update item - id : ' + todoItem.id);
+      console.log('rq update item - isDone : ' + todoItem.isDone);
+      this.$axios.post('/todo-list/item/update', todoItem)
+            .then((res) => {
+              console.log("update success : " + res.data);
+              this.loadList();
+            })
+            .catch((err) => {
+              console.log("err : " + err.message);
+            });
+    },
+
+    saveList() {
+      const requestBody = this.todos;
+
+      this.$axios.post('/todo-list/save', requestBody)
+          .then((res) => {
+            alert("저장되었습니다.")
+            console.log('saved : ' + res.data)
+          })
+          .catch((err) => {
+            console.log('err' + err.message)
+          })
     }
   },
 
@@ -118,7 +183,7 @@ export default {
         }
       }
     }
-  }
+  },
 };
 </script>
 

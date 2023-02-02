@@ -41,7 +41,20 @@ export default {
     };
   },
 
+  mounted() {
+    this.check();
+  },
+
   methods: {
+    check() {
+      let i = 0;
+      this.todos.forEach(todo => {
+        console.log("---elem"+(++i)+"---");
+        console.log("todo.id = " + todo.id);
+        console.log("todo.text = " + todo.text);
+        console.log("todo.isDone = " + todo.isDone);
+      })
+    },
     handleRemove(id) {
       this.$emit("removeTodo", id);
     },
